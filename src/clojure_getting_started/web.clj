@@ -3,26 +3,42 @@
             [compojure.handler :refer [site]]
             [compojure.route :as route]
             [clojure.java.io :as io]
+            [clojure.java.jdbc :as db]
             [ring.adapter.jetty :as jetty]
             [environ.core :refer [env]]            
             [camel-snake-kebab.core :as kebab]))
 
-(def welcome-text "Hi Jared!")
+(def welcome-text "Hi Jared!<br />")
 
 (defn splash []
   {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body (pr-str [welcome-text :from 'Heroku])})
+   :headers {"Content-Type" "text/html"}
+   :body ((str welcome-text (concat (for [kind ["camel" "snake" "kebab"]]
+                   (format "<a href=\"/%s?input=%s\">%s %s</a><br />"
+                           kind sample kind sample))
+                 ["<hr /><ul>"]
+                 (for [s (db/query (env :database-url)
+                                   ["select content from sayings"])]
+                   (format "<li>%s</li>" (:content s)))
+                 ["</ul>"]))})
 
-(defroutes app(GET "/camel" {{input :input} :params}
+(defn record [input]
+  (db/insert! (env :database-url "postgres://localhost:5432/kebabs")
+              :sayings {:content input}))
+
+(defroutes app
+  (GET "/camel" {{input :input} :params}
+       (record input)
        {:status 200
         :headers {"Content-Type" "text/plain"}
         :body (kebab/->CamelCase input)})
   (GET "/snake" {{input :input} :params}
+       (record input)
        {:status 200
         :headers {"Content-Type" "text/plain"}
         :body (kebab/->snake_case input)})
   (GET "/kebab" {{input :input} :params}
+       (record input)
        {:status 200
         :headers {"Content-Type" "text/plain"}
         :body (kebab/->kebab-case input)})
@@ -30,7 +46,7 @@
        (splash))
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
-
+       
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
     (jetty/run-jetty (site #'app) {:port port :join? false})))
