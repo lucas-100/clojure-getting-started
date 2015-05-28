@@ -7,10 +7,12 @@
             [environ.core :refer [env]]            
             [camel-snake-kebab.core :as kebab]))
 
+(def welcome-text "Hi Jared!")
+
 (defn splash []
   {:status 200
    :headers {"Content-Type" "text/plain"}
-   :body (pr-str ["Modified" :from 'Heroku])})
+   :body (pr-str [welcome-text :from 'Heroku])})
 
 (defroutes app(GET "/camel" {{input :input} :params}
        {:status 200
