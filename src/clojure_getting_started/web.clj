@@ -7,7 +7,7 @@
             [ring.adapter.jetty :as jetty]
             [environ.core :refer [env]]
             [camel-snake-kebab.core :as kebab]
-            [clojure-getting-started.normalize]))
+            [clojure-getting-started.normalize :refer [normalize]]))
 
 (defn splash []
   {:status 200
