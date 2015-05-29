@@ -19,7 +19,7 @@
        (clojure-getting-started.normalize/normalize-seq abnormal-numbers normal-high normal-low)))))
 
 
-(defn- normalize-seq
+(defn normalize-seq
   ([values normal-high normal-low]
 
    (def data-high (apply max values)) ; TODO optimize? get data-max and data-min in same loop
