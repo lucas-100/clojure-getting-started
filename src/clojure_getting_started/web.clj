@@ -8,12 +8,10 @@
             [environ.core :refer [env]]            
             [camel-snake-kebab.core :as kebab]))
 
-(def welcome-text "Hi Jared!<br />")
-
 (defn splash []
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body (concat welcome-text (for [kind ["camel" "snake" "kebab"]]
+   :body (concat (for [kind ["camel" "snake" "kebab"]]
                    (format "<a href=\"/%s?input=%s\">%s %s</a><br />"
                            kind sample kind sample))
                  ["<hr /><ul>"]
@@ -21,6 +19,7 @@
                                    ["select content from sayings"])]
                    (format "<li>%s</li>" (:content s)))
                  ["</ul>"])})
+                 
 
 (defn record [input]
   (db/insert! (env :database-url "postgres://localhost:5432/kebabs")
