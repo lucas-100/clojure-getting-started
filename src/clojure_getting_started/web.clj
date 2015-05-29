@@ -20,7 +20,7 @@
                                    ["select content from sayings"])]
                    (format "<li>%s</li>" (:content s)))
                  ["</ul><br /><br /><br />Normal:"]
-                 	"normalize...")})
+                 	(normalize {"abe" [10 5 2 1 -2 -4] "ben" [9 6 6 0 -5 -4] "carl" [32 -2 -3 -4 -5 -6]}))})
 
 
 (defn record [input]
