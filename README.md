@@ -1,9 +1,10 @@
 
-# clojure-getting-started
+# Playing with clojure
 
 A barebones Clojure app, which can easily be deployed to Heroku.  
 
-This application support the [Getting Started with Clojure](https://devcenter.heroku.com/articles/getting-started-with-clojure) article - check it out.
+Just using this for testing/playing with clojure web apps for a little while until I finish the design on real project
+
 
 ## Running Locally
 
